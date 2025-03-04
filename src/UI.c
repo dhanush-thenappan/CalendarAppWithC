@@ -2,25 +2,51 @@
 #include <stdio.h>
 #include "UI.h"
 
-void CreateCalendarDesign() {
-    int count = 1;
-    char Days[] = {'S', 'M', 'T', 'W', 'T', 'F', 'S'};
-    char Month[] = "January";
-    int MonLen = strlen(Month);
+  
+void PrintMonths(int Month, int cc) {
+    char MonthNames[3][9] = {"January", "February", "March"};  
+    int MonLen = strlen(MonthNames[Month]);
+    // printf("\n%d\n", MonLen);
     int startMon = (29/2) - (MonLen/2);
-    for(int i=0;i<startMon;i++, printf("-"));
-    printf("%s", Month);
-    for(int i=0;i<startMon;i++, printf("-"));
-    printf("\n");
-    printf("|");
+    for(int i=0;i<startMon;i++, printf("_"));
+    printf("%s", MonthNames[Month]);
+    for(int i=0;i<startMon;i++, printf("_"));
+    if (cc<2)
+        printf("___");
+}
+void PrintDays() {
+    char Days[] = {'S', 'M', 'T', 'W', 'T', 'F', 'S'};
     for(int i=0;i<7;i++) {
         printf("%3c|", Days[i]);
     }
-    printf("\n+");
+    printf("   ");
+}
+void PrintEmptyLine(int cc) {
     for (int j=0;j<7;j++) {
         printf("---+");
     }
-    printf("\n");
+    if(cc<2)
+        printf("---+");
+}
+void PrintRows() {
+    
+}
+void CreateCalendarDesign() {
+    int count = 1;
+    
+    for(int i=0;i<3;i++) {
+        PrintMonths(i, i);
+    }
+    printf("_\n");
+    for(int i=0;i<3;i++) {
+        printf("|");
+        PrintDays();
+    }
+    printf("\n|");
+    for(int i=0;i<3;i++) {
+        PrintEmptyLine(i);
+    }
+    printf("|\n");
     printf("|");
     for (int i=0;i<4;i++, printf("\n|")) {
         for (int j=0;j<7;j++) {
