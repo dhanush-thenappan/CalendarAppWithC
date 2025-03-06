@@ -4,6 +4,7 @@
 
 
 int main(void) {
+    
     int day, month, year;
     char days[7][10] = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
     printf("Enter date to find day (dd-mm-yyyy) : ");
