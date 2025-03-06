@@ -5,7 +5,7 @@ CFLAGS = -Wall -Wextra -std=c99
 # Target file (executable)
 TARGET = builds/Calendar
 # Source files
-SRCS = src/CalendarAppWithC.c src/DayOfDateCalculator.c
+SRCS = src/CalendarAppWithC.c src/DayOfDateCalculator.c src/UI.c
 OBJS = $(SRCS: .c=.o) 
 # Default rule
 all: $(TARGET)
