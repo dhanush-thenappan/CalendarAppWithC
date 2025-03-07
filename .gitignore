@@ -1,3 +1,6 @@
+# Ignore IDE/Dev tool files and settings
+.vscode/
+
 # Ignore object files
 *.o
 
