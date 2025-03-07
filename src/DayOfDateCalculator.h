@@ -1,9 +1,10 @@
-#ifndef DAYOFDATECALCULATOR_H // Header guard
+// Header guard
+#ifndef DAYOFDATECALCULATOR_H
 
 // Define DAYOFDATECALCULATOR_H
 #define DAYOFDATECALCULATOR_H
 
 // Function declarations
-int dayOfYear(int day, int month,int year);
+int dayOfDate(int day, int month,int year);
 
 #endif
