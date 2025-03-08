@@ -5,6 +5,7 @@
 #define CALENDARAPPWITHC_H
 
 // Function declarations
+int CheckLeap(int year);
 
 // Global variable declarations
 
