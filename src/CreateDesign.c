@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
+
 #include "CalendarAppWithC.h"
 #include "CreateDesign.h"
 #include "DayOfDateCalculator.h"
@@ -13,10 +15,12 @@ char Days[7] = {'S', 'M', 'T', 'W', 'T', 'F', 'S'};
 
 int DaysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-void CreateDesign(int year) {
+void CreateDesign(int year, struct tm Today) {
     int monthCount = 0;
-    int minSpace;
-    int charCount;
+    int currentYear = FALSE;
+    if(year == Today.tm_year){
+        currentYear = TRUE;
+    }
     for(int i = 0; i < TOTAL_MONTHS / MAX_MONTH_LIMIT_PER_ROW; i++, printf("\n\n")) {
             PrintMonthName(&monthCount);
             printf("\n");
@@ -24,7 +28,7 @@ void CreateDesign(int year) {
             printf("\n");
             PrintSeparator();
             printf("\n");
-            PrintDates(year, i);
+            PrintDates(year, i, currentYear, Today);
             printf("\n");
     }
 }
@@ -39,15 +43,15 @@ void PrintMonthName(int *monthCount) {
         minSpace = (MAX_MONTH_CHAR_LIMIT / 2) - (strlen(Months[*monthCount])/2);
         while(charCount < MAX_MONTH_CHAR_LIMIT) {
             if (charCount < minSpace) {
-                printf("_");
+                printf(CYAN "_" RESET);
                 charCount++;
             }
             else if (charCount == minSpace) {
-                printf("%s", Months[*monthCount]);
+                printf(BLUE "%s" RESET, Months[*monthCount]);
                 charCount += strlen(Months[*monthCount]);
             }
             else {
-                printf("_");
+                printf(CYAN "_" RESET);
                 charCount++;
             }
         }
@@ -57,35 +61,36 @@ void PrintMonthName(int *monthCount) {
 
 void PrintWeekRow() {
     for(int i = 0; i < MAX_MONTH_LIMIT_PER_ROW; i++, printf("   ")) {
-        printf("|");
-        for(int j = 0; j < MAX_DAYS_IN_A_WEEK; j++, printf("|")) {
-            printf(" %c ", Days[j]);
+        printf(CYAN "|" RESET);
+        for(int j = 0; j < MAX_DAYS_IN_A_WEEK; j++, printf(CYAN "|" RESET)) {
+            printf(YELLOW " %c " RESET, Days[j]);
         }
     }
 }
 
 void PrintSeparator() {
     for(int i = 0; i < MAX_MONTH_LIMIT_PER_ROW; i++, printf("   ")) {
-        printf("|");
-        for(int j = 0; j < MAX_DAYS_IN_A_WEEK; j++, printf("|")) {
-            printf("---");
+        printf(CYAN "|" RESET);
+        for(int j = 0; j < MAX_DAYS_IN_A_WEEK; j++, printf(CYAN "|" RESET)) {
+            printf(CYAN "---" RESET);
         }
     }
 }
 
 void PrintRowEnd() {
     for(int i = 0; i < MAX_MONTH_LIMIT_PER_ROW; i++, printf("   ")) {
-        printf("-");
-        for(int j = 0; j < MAX_DAYS_IN_A_WEEK; j++, printf("-")) {
-            printf("---");
+        printf(CYAN "-" RESET);
+        for(int j = 0; j < MAX_DAYS_IN_A_WEEK; j++, printf(CYAN "-" RESET)) {
+            printf(CYAN "---" RESET);
         }
     }
 }
 
-void PrintDates(int year, int startMonth) { // 2025 3
+void PrintDates(int year, int startMonth, int currentYear, struct tm Today) { // 2025 3
     int DayCount[MAX_MONTH_LIMIT_PER_ROW];
     int over = 0;
     int startDays[MAX_MONTH_LIMIT_PER_ROW];
+    int currentMonth = 0;
     for(int i = 0; i < MAX_MONTH_LIMIT_PER_ROW; DayCount[i++] = 1);
     for(int i = 0; i < MAX_MONTH_LIMIT_PER_ROW; i++)
         startDays[i] = dayOfDate(1,(startMonth * MAX_MONTH_LIMIT_PER_ROW)+1+i,year);
@@ -98,26 +103,33 @@ void PrintDates(int year, int startMonth) { // 2025 3
         }
     }
     while (over != (int)(pow(2, MAX_MONTH_LIMIT_PER_ROW) - 1)) {
-        printf("|");
+        printf(CYAN "|" RESET);
         for(int i = 0; i < MAX_MONTH_LIMIT_PER_ROW; i++) {
-            for(int j = 0; j < MAX_DAYS_IN_A_WEEK; j++, printf("|")) {
-                if (DayCount[i] > DaysInMonth[startMonth*MAX_MONTH_LIMIT_PER_ROW+i]) {
+            currentMonth = startMonth*MAX_MONTH_LIMIT_PER_ROW+i;
+            for(int j = 0; j < MAX_DAYS_IN_A_WEEK; j++, printf(CYAN "|" RESET)) {
+                if (DayCount[i] > DaysInMonth[currentMonth]) {
                     over |= (int)pow(2, i);
                     printf("   ");
                 }
                 else {
                     if(j == startDays[i]) {
-                        printf(" %-2d", (DayCount[i])++);
+                        if(DayCount[i] == Today.tm_mday && currentMonth == Today.tm_mon && year == Today.tm_year)
+                            printf(RED " %-2d" RESET, (DayCount[i])++);
+                        else
+                            printf(GREEN " %-2d" RESET, (DayCount[i])++);
                     }
                     else if(DayCount[i] > 1) {
-                        printf(" %-2d", (DayCount[i])++);
+                        if(DayCount[i] == Today.tm_mday && currentMonth == Today.tm_mon && year == Today.tm_year)
+                            printf(RED " %-2d" RESET, (DayCount[i])++);
+                        else
+                            printf(GREEN " %-2d" RESET, (DayCount[i])++);
                     }
                     else printf("   ");
                 }
             }
             if (i != MAX_MONTH_LIMIT_PER_ROW - 1) {
                 printf("   ");
-                printf("|");    
+                printf(CYAN "|" RESET);    
             }
         }
         printf("\n");
@@ -126,5 +138,5 @@ void PrintDates(int year, int startMonth) { // 2025 3
         else
             PrintRowEnd();
         printf("\n");
-    }   
+    }
 }
