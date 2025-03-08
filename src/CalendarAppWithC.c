@@ -6,15 +6,24 @@
 
 int main(void) {
     int year = 0;
+    char choice;
     struct tm today;
     TodayDate(&today);
+    do {
+        printf("\e[1;1H\e[2J");
+        printf("Enter a year to find its calendar (yyyy) : ");
+        scanf("%d", &year);
+        if (CheckLeap(year)) {
+            DaysInMonth[1] = 29;
+        }
+        CreateDesign(year, today);
+        getchar();
+    } while (printf("Do you wish to continue(Y\\N)? ") && scanf("%c", &choice) && (choice == 'Y' || choice == 'y'));
     printf("\e[1;1H\e[2J");
-    printf("Enter a year to find its calendar (yyyy) : ");
-    scanf("%d", &year);
-    if (CheckLeap(year)) {
-        DaysInMonth[1] = 29;
-    }
-    CreateDesign(year, today);
+    
+    printf(GREEN "|----------------------------------------------------------------------------------------|\n" RESET);
+    printf(GREEN "|                                   " RED " HAVE A GREAT DAY " GREEN "                                   |\n" RESET);
+    printf(GREEN "|----------------------------------------------------------------------------------------|\n" RESET);
     return 0;
 }
 
