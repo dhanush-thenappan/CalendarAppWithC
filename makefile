@@ -2,6 +2,8 @@
 CC = gcc
 # Compiler flags
 CFLAGS = -Wall -Wextra -std=c99
+#Linker flags
+LDFLAGS = -lm
 # Target file (executable)
 TARGET = builds/Calendar
 # Source files
@@ -11,7 +13,7 @@ OBJS = $(SRCS: .c=.o)
 all: $(TARGET)
 # Building target
 $(TARGET) : $(OBJS)
-	$(CC) $(OBJS) -o $(TARGET)
+	$(CC) $(OBJS) -o $(TARGET) $(LDFLAGS)
 
 # How to build .o files from .c files
 %.o: %.c
