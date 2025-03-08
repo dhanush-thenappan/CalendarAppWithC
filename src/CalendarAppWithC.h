@@ -7,6 +7,7 @@
 // Function declarations
 int CheckLeap(int year);
 void TodayDate(struct tm* today);
+void PrintThanksMessage();
 // Global variable declarations
 
 #endif

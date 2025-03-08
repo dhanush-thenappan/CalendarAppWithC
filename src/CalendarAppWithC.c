@@ -1,29 +1,44 @@
+// Standard includes
 #include <stdio.h>
 #include <time.h>
+
+// User-defined includes
 #include "CalendarAppWithC.h"
 #include "DayOfDateCalculator.h"
 #include "CreateDesign.h"
 
+// Main function
 int main(void) {
     int year = 0;
     char choice;
-    struct tm today;
-    TodayDate(&today);
+    struct tm today; 
+    // Array with Birth Dates which will be printed with MAGENTA on the calendar
+    struct tm birthDates[2] = { {.tm_mday = 29, .tm_mon = 4, .tm_year = 2003},
+                        {.tm_mday = 18, .tm_mon = 5, .tm_year = 2003}};
+    int sizeOfbirthDates = sizeof(birthDates) / sizeof(birthDates[0]); // Find size of the birthDates array
+    TodayDate(&today); // Find and store today's date
     do {
         printf("\e[1;1H\e[2J");
-        printf("Enter a year to find its calendar (yyyy) : ");
-        scanf("%d", &year);
+        GetYearInput:
+        printf("Enter a year (1900-2100) to find its calendar (yyyy) : ");
+        scanf("%d", &year); // Get year input from the user
+        // If input is less than 1900 or greater than 2100, prompt the user again to give input in range
+        if (year <= 1899 || year >= 2101) {
+            printf("\e[1;1H\e[2J");
+            printf(RED "Enter a valid year between 1900-2100!" RESET);
+            goto GetYearInput;
+        }
+        // Check if the year entered is leap year. If yes, then number of days in February becomes 29
         if (CheckLeap(year)) {
             DaysInMonth[1] = 29;
         }
-        CreateDesign(year, today);
+        // Call the CreateDesign() function to print the calendar
+        CreateDesign(year, today, birthDates, sizeOfbirthDates);
         getchar();
-    } while (printf("Do you wish to continue(Y\\N)? ") && scanf("%c", &choice) && (choice == 'Y' || choice == 'y'));
+    } while (printf("Do you wish to continue(Y\\N)? ") && scanf("%c", &choice) && (choice == 'Y' || choice == 'y')); // Ask choice from user whether to continue
     printf("\e[1;1H\e[2J");
-    
-    printf(GREEN "|----------------------------------------------------------------------------------------|\n" RESET);
-    printf(GREEN "|                                   " RED " HAVE A GREAT DAY " GREEN "                                   |\n" RESET);
-    printf(GREEN "|----------------------------------------------------------------------------------------|\n" RESET);
+    // Print a message at the end
+    PrintThanksMessage();
     return 0;
 }
 
@@ -48,4 +63,10 @@ void TodayDate(struct tm *today) {
     today -> tm_mon = tm.tm_mon;  // Months are 0-based in tm struct
     today -> tm_year = tm.tm_year + 1900;  // Years since 1900
 
+}
+
+void PrintThanksMessage() {
+    printf(GREEN "|----------------------------------------------------------------------------------------|\n" RESET);
+    printf(GREEN "|                                   " RED " HAVE A GREAT DAY " GREEN "                                   |\n" RESET);
+    printf(GREEN "|----------------------------------------------------------------------------------------|\n" RESET);
 }

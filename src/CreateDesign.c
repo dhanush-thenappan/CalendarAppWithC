@@ -15,7 +15,7 @@ char Days[7] = {'S', 'M', 'T', 'W', 'T', 'F', 'S'};
 
 int DaysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-void CreateDesign(int year, struct tm Today) {
+void CreateDesign(int year, struct tm Today, const struct tm birthDatesArray[], int sizeOfbirthDates) {
     int monthCount = 0;
     int currentYear = FALSE;
     if(year == Today.tm_year){
@@ -28,7 +28,7 @@ void CreateDesign(int year, struct tm Today) {
             printf("\n");
             PrintSeparator();
             printf("\n");
-            PrintDates(year, i, currentYear, Today);
+            PrintDates(year, i, currentYear, Today, birthDatesArray, sizeOfbirthDates);
             printf("\n");
     }
 }
@@ -86,11 +86,12 @@ void PrintRowEnd() {
     }
 }
 
-void PrintDates(int year, int startMonth, int currentYear, struct tm Today) { // 2025 3
+void PrintDates(int year, int startMonth, int currentYear, struct tm Today, const struct tm birthDatesArray[], int sizeOfbirthDates) { // 2025 3
     int DayCount[MAX_MONTH_LIMIT_PER_ROW];
     int over = 0;
     int startDays[MAX_MONTH_LIMIT_PER_ROW];
     int currentMonth = 0;
+    struct tm temp;
     for(int i = 0; i < MAX_MONTH_LIMIT_PER_ROW; DayCount[i++] = 1);
     for(int i = 0; i < MAX_MONTH_LIMIT_PER_ROW; i++)
         startDays[i] = dayOfDate(1,(startMonth * MAX_MONTH_LIMIT_PER_ROW)+1+i,year);
@@ -107,20 +108,28 @@ void PrintDates(int year, int startMonth, int currentYear, struct tm Today) { //
         for(int i = 0; i < MAX_MONTH_LIMIT_PER_ROW; i++) {
             currentMonth = startMonth*MAX_MONTH_LIMIT_PER_ROW+i;
             for(int j = 0; j < MAX_DAYS_IN_A_WEEK; j++, printf(CYAN "|" RESET)) {
+                temp.tm_mday = DayCount[i];
+                temp.tm_mon = currentMonth;
+                temp.tm_year = year;
                 if (DayCount[i] > DaysInMonth[currentMonth]) {
                     over |= (int)pow(2, i);
                     printf("   ");
                 }
                 else {
                     if(j == startDays[i]) {
+                        
                         if(DayCount[i] == Today.tm_mday && currentMonth == Today.tm_mon && year == Today.tm_year)
                             printf(RED " %-2d" RESET, (DayCount[i])++);
+                        else if (CheckValidBirthDate(birthDatesArray, sizeOfbirthDates, temp))
+                            printf(MAGENTA " %-2d" RESET, (DayCount[i])++);
                         else
                             printf(GREEN " %-2d" RESET, (DayCount[i])++);
                     }
                     else if(DayCount[i] > 1) {
                         if(DayCount[i] == Today.tm_mday && currentMonth == Today.tm_mon && year == Today.tm_year)
                             printf(RED " %-2d" RESET, (DayCount[i])++);
+                        else if (CheckValidBirthDate(birthDatesArray, sizeOfbirthDates, temp))
+                            printf(MAGENTA " %-2d" RESET, (DayCount[i])++);
                         else
                             printf(GREEN " %-2d" RESET, (DayCount[i])++);
                     }
@@ -139,4 +148,15 @@ void PrintDates(int year, int startMonth, int currentYear, struct tm Today) { //
             PrintRowEnd();
         printf("\n");
     }
+}
+
+int CheckValidBirthDate(const struct tm birthDatesArray[], int sizeOfbirthDates, struct tm checkDate) {
+    for (int i = 0; i < sizeOfbirthDates; i++) {
+        if( birthDatesArray[i].tm_mday == checkDate.tm_mday && 
+            (birthDatesArray[i].tm_mon - 1) == checkDate.tm_mon && 
+            birthDatesArray[i].tm_year == checkDate.tm_year) {
+                return 1;
+        }
+    }
+    return 0;
 }

@@ -19,12 +19,13 @@
 #define BLUE    "\x1B[34m" // Blue
 #define MAGENTA "\x1B[35m" // Magenta (Purple)
 // Function declarations
-void CreateDesign(int year, struct tm Today);
+void CreateDesign(int year, struct tm Today, const struct tm birthDatesArray[], int sizeOfbirthDates);
 void PrintMonthName(int *monthCount);
 void PrintWeekRow();
 void PrintSeparator();
-void PrintDates(int year, int startMonth, int currentYear, struct tm Today);
+void PrintDates(int year, int startMonth, int currentYear, struct tm Today, const struct tm birthDatesArray[], int sizeOfbirthDates);
 void PrintRowEnd();
+int CheckValidBirthDate(const struct tm birthDatesArray[], int sizeOfbirthDates, struct tm checkDate);
 
 // Global variable declarations
 extern char Months[12][10];
