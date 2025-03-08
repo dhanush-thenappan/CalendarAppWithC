@@ -42,6 +42,12 @@ int main(void) {
     return 0;
 }
 
+/*
+Function name: CheckLeap()
+Return type: int
+Parameters: int year
+Process: Returns 1 when the year given is a leap and 0 if not.
+*/
 int CheckLeap(int year) {
     if (year % 4 == 0) {
         if (year % 100 == 0) {
@@ -55,6 +61,12 @@ int CheckLeap(int year) {
     return 0; // Not a leap year
 }
 
+/*
+Function name: TodayDate()
+Return type: void
+Parameters: struct tm *today
+Process: Find the date of today using the time() function from time.h and update the day, month and year values.
+*/
 void TodayDate(struct tm *today) {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
@@ -65,6 +77,12 @@ void TodayDate(struct tm *today) {
 
 }
 
+/*
+Function name: PrintThanksMessage()
+Return type: void
+Parameters: Nil
+Process: Print a "HAVE A GREAT DAY" message inside a box in the end.
+*/
 void PrintThanksMessage() {
     printf(GREEN "|----------------------------------------------------------------------------------------|\n" RESET);
     printf(GREEN "|                                   " RED " HAVE A GREAT DAY " GREEN "                                   |\n" RESET);
