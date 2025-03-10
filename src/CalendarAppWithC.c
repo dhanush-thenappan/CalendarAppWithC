@@ -11,11 +11,12 @@
 int main(void) {
     int year = 0;
     char choice;
-    struct tm today; 
+    TIME today; 
     // Array with Birth Dates which will be printed with MAGENTA on the calendar
-    struct tm birthDates[2] = { {.tm_mday = 29, .tm_mon = 4, .tm_year = 2003},
-                        {.tm_mday = 18, .tm_mon = 5, .tm_year = 2003}};
-    int sizeOfbirthDates = sizeof(birthDates) / sizeof(birthDates[0]); // Find size of the birthDates array
+    TIME birthDate[] = {{BDAY = 29, BMON = 4, BYEAR = 2003},
+                        {BDAY = 18, BMON = 5, BYEAR = 2003},
+                        {BDAY = 29, BMON = 3, BYEAR = 2004}};
+    int sizeOfbirthDate = sizeof(birthDate) / sizeof(birthDate[0]); // Find size of the birthDate array
     TodayDate(&today); // Find and store today's date
     do {
         printf("\e[1;1H\e[2J");
@@ -33,7 +34,7 @@ int main(void) {
             DaysInMonth[1] = 29;
         }
         // Call the CreateDesign() function to print the calendar
-        CreateDesign(year, today, birthDates, sizeOfbirthDates);
+        CreateDesign(year, today, birthDate, sizeOfbirthDate);
         getchar();
     } while (printf("Do you wish to continue(Y\\N)? ") && scanf("%c", &choice) && (choice == 'Y' || choice == 'y')); // Ask choice from user whether to continue
     printf("\e[1;1H\e[2J");
@@ -64,12 +65,12 @@ int CheckLeap(int year) {
 /*
 Function name: TodayDate()
 Return type: void
-Parameters: struct tm *today
+Parameters: TIME *today
 Process: Find the date of today using the time() function from time.h and update the day, month and year values.
 */
-void TodayDate(struct tm *today) {
+void TodayDate(TIME *today) {
     time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
+    TIME tm = *localtime(&t);
     // Extract day, month, and year
     today -> tm_mday = tm.tm_mday;
     today -> tm_mon = tm.tm_mon;  // Months are 0-based in tm struct

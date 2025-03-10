@@ -22,13 +22,13 @@
 #define MAGENTA "\x1B[35m" // Magenta (for birth dates)
 
 // Function declarations
-void CreateDesign(int year, struct tm Today, const struct tm birthDatesArray[], int sizeOfbirthDates);
+void CreateDesign(int year, TIME Today, const TIME birthDatesArray[], int sizeOfbirthDates);
 void PrintMonthName(int *monthCount);
 void PrintWeekRow();
 void PrintSeparator();
-void PrintDates(int year, int startMonth, struct tm Today, const struct tm birthDatesArray[], int sizeOfbirthDates);
+void PrintDates(int year, int startMonth, TIME Today, const TIME birthDatesArray[], int sizeOfbirthDates);
 void PrintRowEnd();
-int CheckValidBirthDate(const struct tm birthDatesArray[], int sizeOfbirthDates, struct tm checkDate);
+int CheckValidBirthDate(const TIME birthDatesArray[], int sizeOfbirthDates, TIME checkDate);
 
 // Global variable declarations
 extern char Months[12][10];

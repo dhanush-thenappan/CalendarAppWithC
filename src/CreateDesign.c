@@ -27,7 +27,7 @@ int DaysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 /*
 Function name: CreateDesign()
 Return type: void
-Parameters: int year, struct tm Today, const struct tm birthDatesArray[], int sizeOfbirthDates
+Parameters: int year, TIME Today, const TIME birthDatesArray[], int sizeOfbirthDates
 Process: Creates the calendar design. 
          Based on the MAX_MONTH_LIMIT_PER_ROW set by the user in CreateDesign.h, this function calls
          1. PrintMonthName() to print month names
@@ -35,7 +35,7 @@ Process: Creates the calendar design.
          3. PrintSeparator() to print the separator line
          4. PrintDates() to print all the dates in the months in that respective row. 
 */
-void CreateDesign(int year, struct tm Today, const struct tm birthDatesArray[], int sizeOfbirthDates) {
+void CreateDesign(int year, TIME Today, const TIME birthDatesArray[], int sizeOfbirthDates) {
     int monthCount = 0; // Track of month name that was last printed
     for(int i = 0; i < TOTAL_MONTHS / MAX_MONTH_LIMIT_PER_ROW; i++, printf("\n")) {
             PrintMonthName(&monthCount);
@@ -130,17 +130,17 @@ void PrintRowEnd() {
 /*
 Function name: PrintDates()
 Return type: void
-Parameters: int year, int startMonth, struct tm Today, const struct tm birthDatesArray[], int sizeOfbirthDates
+Parameters: int year, int startMonth, TIME Today, const TIME birthDatesArray[], int sizeOfbirthDates
 Process: This function prints the dates of each month in each row. This function updates all the months row by row, not month by month.
          It also checks whether the year entered by the user is the current year. If yes, it prints Today's date in RED.
          It also takes the BirthDates array from main function and checks whether any birth date is available in the current year. If found, it prints them in MAGENTA.
 */
-void PrintDates(int year, int startMonth, struct tm Today, const struct tm birthDatesArray[], int sizeOfbirthDates) {
+void PrintDates(int year, int startMonth, TIME Today, const TIME birthDatesArray[], int sizeOfbirthDates) {
     int DayCount[MAX_MONTH_LIMIT_PER_ROW]; // Current printing date of each month in the row
     int over = 0; // To check if all months have been printed
     int startDays[MAX_MONTH_LIMIT_PER_ROW]; // Finds the starting day of the month. That is the corrosponding day for the 1st of month.
     int currentMonth = 0; 
-    struct tm currentWorkingDate;
+    TIME currentWorkingDate;
     for(int i = 0; i < MAX_MONTH_LIMIT_PER_ROW; DayCount[i++] = 1); // Initialize all the start dates to 1
     for(int i = 0; i < MAX_MONTH_LIMIT_PER_ROW; i++)
         // startMonth * MAX_MONTH_LIMIT_PER_ROW)+1+i -> Gets the current working month
@@ -225,10 +225,10 @@ void PrintDates(int year, int startMonth, struct tm Today, const struct tm birth
 /*
 Function name: CheckValidBirthDate()
 Return type: int
-Parameters: const struct tm birthDatesArray[], int sizeOfbirthDates, struct tm checkDate
+Parameters: const TIME birthDatesArray[], int sizeOfbirthDates, TIME checkDate
 Process: Loops through the birthDatesArray[] and checks whether it matches the checkDate. If mathces, the function returns 1.
 */
-int CheckValidBirthDate(const struct tm birthDatesArray[], int sizeOfbirthDates, struct tm checkDate) {
+int CheckValidBirthDate(const TIME birthDatesArray[], int sizeOfbirthDates, TIME checkDate) {
     for (int i = 0; i < sizeOfbirthDates; i++) {
         // Check the year, month and date. If all 3 matches, return 1.
         if( birthDatesArray[i].tm_year == checkDate.tm_year &&
